@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2018-2023 Julian Heinovski <julian.heinovski@ccs-labs.org>
+// Copyright (C) 2012-2023 Michele Segata <segata@ccs-labs.org>
 //
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
@@ -18,32 +18,15 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 
-#pragma once
+package org.car2x.plexe.scenarios;
 
-#include "plexe/scenarios/BaseScenario.h"
-#include "plexe/apps/SimplePlatooningApp.h"
+import org.car2x.plexe.scenarios.BBaseScenario;
 
-namespace plexe {
-
-class SimpleScenario : public BaseScenario {
-
-protected:
-    // leader average speed
-    double leaderSpeed;
-    // application layer, used to stop the simulation
-    SimplePlatooningApp* appl;
-
-private:
-    cMessage* startBraking;
-    cMessage* checkDistance;
-
-public:
-    virtual void initialize(int stage) override;
-    virtual void handleMessage(cMessage* msg) override;
-    virtual ~SimpleScenario();
-    SimpleScenario()
-        : leaderSpeed(0)
-        , appl(nullptr){};
-};
-
-} // namespace plexe
+simple ExitScenario extends BBaseScenario
+{
+    parameters:
+        // controller to engage when joining the platoon
+        string targetController;
+        @display("i=block/app2");
+        @class(plexe::ExitScenario);
+}

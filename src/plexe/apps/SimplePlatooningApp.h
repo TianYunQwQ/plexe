@@ -18,10 +18,13 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 
-#ifndef SIMPLEPLATOONINGAPP_H_
-#define SIMPLEPLATOONINGAPP_H_
+#pragma once
 
 #include "plexe/apps/BaseApp.h"
+#include "plexe/scenarios/BaseScenario.h"
+#include "plexe/messages/AbandonPlatoon_m.h"
+#include "plexe/messages/NewFormation_m.h"
+
 
 namespace plexe {
 
@@ -31,8 +34,24 @@ public:
     SimplePlatooningApp()
     {
     }
+
+    void sendAbandonMessage();
+    virtual void sendUnicast(cPacket* msg, int destination);
+
+protected:
+    /** override from BaseApp */
+    virtual void initialize(int stage) override;
+    virtual void handleLowerMsg(cMessage* msg) override;
+
+    BaseScenario* scenario;
+
+private:
+    AbandonPlatoon* createAbandonMessage();
+    NewFormation* createNewFormationMessage(const std::vector<int>& newPlatoonFormation);
+    void handleAbandonPlatoon(const AbandonPlatoon* msg);
+    void handleNewFormation(const NewFormation* msg);
+    void sendNewFormationToFollowers(const std::vector<int>& newPlatoonFormation);
 };
 
-} // namespace plexe
 
-#endif /* SIMPLEPLATOONINGAPP_H_ */
+} // namespace plexe
